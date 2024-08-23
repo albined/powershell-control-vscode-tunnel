@@ -1,1 +1,5 @@
-ssh user@domain "powershell -ExecutionPolicy Bypass -Command \"Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList 'powershell.exe -ExecutionPolicy Bypass -File \"C:\\Path\\start_code_tunnel.ps1\"'\""
+ssh user@domain "powershell -ExecutionPolicy Bypass -Command \"Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList 'powershell.exe -ExecutionPolicy Bypass -File \"C:\\Path\\run_tunnel.ps1 -start\"'\""
+
+ ssh user@domain "powershell -ExecutionPolicy Bypass -File C:\Path\run_tunnel.ps1 -stop"
+
+ ssh user@domain "powershell -ExecutionPolicy Bypass -File C:\Path\run_tunnel.ps1 -check"
