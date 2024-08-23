@@ -1,0 +1,36 @@
+
+
+input_boolean:
+  tunnel_datoru_gojo_state:
+    name: "Tunnel Datoru Gojo State"
+    initial: off
+
+shell_command:
+  sleep_datoru_gojo: ssh albin@gojo.home -o StrictHostKeyChecking=no "rundll32.exe powrprof.dll,SetSuspendState Sleep"
+  run_tunnel_datoru_gojo: ssh albin@gojo.home "powershell -ExecutionPolicy Bypass -Command \"Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList 'powershell.exe -ExecutionPolicy Bypass -File \"C:\\Users\\albin\\Documents\\VSCode\\powershell-control-vscode-tunnel\\run_tunnel.ps1 -start\"'\""
+  stop_tunnel_datoru_gojo:  ssh albin@gojo.home "powershell -ExecutionPolicy Bypass -File C:\\Users\\albin\\Documents\\VSCode\\powershell-control-vscode-tunnel\\run_tunnel.ps1 -stop"
+  check_tunnel_datoru_gojo:  ssh albin@gojo.home "powershell -ExecutionPolicy Bypass -File C:\\Users\\albin\\Documents\\VSCode\\powershell-control-vscode-tunnel\\run_tunnel.ps1 -check"
+
+switch:
+  - platform: wake_on_lan
+    mac: 74:56:3c:67:1f:22
+    name: Datoru-Gojo
+    host: gojo.home
+    turn_off:
+      service: shell_command.sleep_datoru_gojo
+
+  - platform: template
+    switches:
+      tunnel_datoru_gojo:
+        friendly_name: "Tunnel Datoru Gojo"
+        value_template: "{{ states('input_boolean.tunnel_datoru_gojo_state') }}"
+        turn_on:
+          - service: shell_command.run_tunnel_datoru_gojo
+          - service: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.tunnel_datoru_gojo_state
+        turn_off:
+          - service: shell_command.stop_tunnel_datoru_gojo
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.tunnel_datoru_gojo_state

@@ -1,0 +1,1 @@
+ssh user@domain "powershell -ExecutionPolicy Bypass -Command \"Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList 'powershell.exe -ExecutionPolicy Bypass -File \"C:\\Path\\start_code_tunnel.ps1\"'\""
